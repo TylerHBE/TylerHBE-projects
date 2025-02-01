@@ -58,7 +58,7 @@ const Home = () => (
     </Container>
   );
 
-  const About = () => (
+const About = () => (
     <Container className="mt-5 text-center">
       <div className="open-block">
         <h2>Our Product Philosophy</h2>
@@ -83,27 +83,44 @@ const Home = () => (
     </Container>
   );
 
-const Downloads = () => (
-  <Container className="mt-5 text-center">
-    <h1>Downloads</h1>
-    <div className="d-flex justify-content-center flex-wrap">
-      <Card className="m-3 shadow" style={{ width: "18rem" }}>
-        <Card.Body>
-          <Card.Title>VST Plugin 1</Card.Title>
-          <Card.Text>A powerful synthesizer for electronic music production.</Card.Text>
-          <Button variant="primary" href="/download/1">Download</Button>
-        </Card.Body>
-      </Card>
-      <Card className="m-3 shadow" style={{ width: "18rem" }}>
-        <Card.Body>
-          <Card.Title>VST Plugin 2</Card.Title>
-          <Card.Text>High-quality reverb effect for professional mixing.</Card.Text>
-          <Button variant="primary" href="/download/2">Download</Button>
-        </Card.Body>
-      </Card>
-    </div>
-  </Container>
-);
+function Downloads() {
+
+  const API_URL = "http://localhost:5000";
+
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+      axios.get(`${API_URL}/files`).then(response => {
+          setFiles(response.data);
+          console.log(files)
+      });
+  }, []);
+
+  const handleDownload = (filename) => {
+      window.location.href = `${API_URL}/download/${filename}`;
+  };
+
+  return (
+    <Container className="mt-5">
+      <h1 className="text-start">Downloads</h1>
+      <Row className="g-4">
+        {files.map(file => (
+          <Col md={6} lg={4} key={file.name}>
+            <Card className="shadow product-card h-100">
+              <Link to={`/product/${file.name}`} className="text-decoration-none text-dark">
+                <Image src={`/path-to-vst${file.name}.jpg`} fluid className="p-3" />
+                <Card.Body>
+                  <Card.Title>{file.name}</Card.Title>
+                  <Card.Text>A high-quality plugin for professional music production.</Card.Text>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
+};
 
 const Navigation = () => (
   <Navbar bg="dark" variant="dark" expand="lg">
