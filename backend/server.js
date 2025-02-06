@@ -34,15 +34,18 @@ const File = mongoose.model("File", fileSchema);
 const Download = mongoose.model("Download", downloadSchema);
 
 // API to fetch files
-app.get("/files", async (req, res) => {
-    const files = await File.find();
-    res.json(files);
-});
-
-// API to fetch files
 app.get("/downloads", async (req, res) => {
     const downloads = await Download.find();
     res.json(downloads);
+});
+
+// API to download a file
+app.get("/downloads/:filename", async (req, res) => {
+    const { filename } = req.params;
+
+    const download = await Download.findOne({ file: filename });
+
+    res.json(download);
 });
 
 // API to download a file

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useSearchParams } from "react-router-dom";
 import { Container, Navbar, Nav, Card, Button, Row, Col, Image } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -83,6 +83,23 @@ const About = () => (
     </Container>
   );
 
+const NotFoundPage = () => {
+  return (
+    <Container className="text-center" style={{ marginTop: "10%" }}>
+      <Row>
+        <Col>
+          <h1 style={{ fontSize: "10rem", color: "#e74c3c" }}>404</h1>
+          <h2>Oops! Page Not Found</h2>
+          <p>
+            The page you're looking for doesn't exist. You may have mistyped
+            the address or the page may have moved.
+          </p>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
 function Downloads() {
 
   const API_URL = "http://localhost:5000";
@@ -103,15 +120,17 @@ function Downloads() {
   return (
     <Container className="mt-5">
       <h1 className="text-start">Downloads</h1>
+      <h3 className="text-muted text-start mt-3">Effects</h3>
       <Row className="g-4">
         {files.map(file => (
           <Col md={6} lg={4} key={file.name}>
             <Card className="shadow product-card h-100">
-              <Link to={`/product/${file.name}`} className="text-decoration-none text-dark">
-                <Image src={`/path-to-vst${file.name}.jpg`} fluid className="p-3" />
+              <Link to={`/product/?filename=${file.file}`} className="text-decoration-none text-dark">
+                <Image src={`/${file.image}`} fluid className="p-3" alt={`${file.imageDescription}`}/>
                 <Card.Body>
                   <Card.Title>{file.name}</Card.Title>
-                  <Card.Text>A high-quality plugin for professional music production.</Card.Text>
+                  <Card.Text>{file.description}</Card.Text>
+                  <Card.Footer>{file.downloads} downloads, {file.fileSize}</Card.Footer>
                 </Card.Body>
               </Link>
             </Card>
@@ -121,6 +140,69 @@ function Downloads() {
     </Container>
   );
 };
+
+function DownloadPage() {
+
+  const API_URL = "http://localhost:5000";
+
+  const [searchParams] = useSearchParams();
+  const filename = searchParams.get("filename");
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (filename) {
+      fetchData(filename);
+    }
+    else {
+      return NotFoundPage;
+    }
+  }, [filename]);
+
+  const fetchData = async (x) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`${API_URL}/downloads/${x}`);
+      setData(response.data);
+    } catch (err) {
+      setError("Failed to fetch data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Container className="mt-5">
+      <h1 className="text-start">Download</h1>
+            <Card className="shadow product-card h-100">
+                <Card.Body>
+                  <h1 className="text-xl font-bold mb-4">Query Fetcher</h1>
+                  {loading && <p>Loading...</p>}
+                  {error && <p className="text-red-500">{error}</p>}
+                  {data ? (
+                    <div>
+                      <p className="bg-gray-100 p-2 rounded text-sm overflow-auto">
+                        {JSON.stringify(data, null, 2)}
+                      </p>
+                      <Image src={`/${data.image}`} fluid className="p-3" alt={`${data.imageDescription}`}/>
+                    </div>
+                    
+                  ) : (
+                    <p>
+                      Null!
+                    </p>
+                  )}
+                  <Button onClick={() => fetchData(filename)} className="mt-4" disabled={!filename}>
+                    Refresh Data
+                  </Button>
+                </Card.Body>
+            </Card>
+    </Container>
+  );
+
+}
 
 const Navigation = () => (
   <Navbar bg="dark" variant="dark" expand="lg">
@@ -148,6 +230,7 @@ const App = () => (
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/downloads" element={<Downloads />} />
+      <Route path="/product/" element={<DownloadPage />}/>
     </Routes>
     <Footer />
   </Router>
