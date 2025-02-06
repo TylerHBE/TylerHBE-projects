@@ -10,10 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => console.log("MongoDB Connected"))
+mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
 // Define Schema & Model
@@ -22,12 +19,30 @@ const fileSchema = new mongoose.Schema({
     downloadCount: { type: Number, default: 0 }
 });
 
+// Define Schema & Model
+const downloadSchema = new mongoose.Schema({
+    name: String,
+    file: String,
+    image: String,
+    imageDescription: String,
+    downloads: { type: Number, default: 0 },
+    fileSize: String,
+    description: String
+});
+
 const File = mongoose.model("File", fileSchema);
+const Download = mongoose.model("Download", downloadSchema);
 
 // API to fetch files
 app.get("/files", async (req, res) => {
     const files = await File.find();
     res.json(files);
+});
+
+// API to fetch files
+app.get("/downloads", async (req, res) => {
+    const downloads = await Download.find();
+    res.json(downloads);
 });
 
 // API to download a file

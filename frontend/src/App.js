@@ -90,7 +90,7 @@ function Downloads() {
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
-      axios.get(`${API_URL}/files`).then(response => {
+      axios.get(`${API_URL}/downloads`).then(response => {
           setFiles(response.data);
           console.log(files)
       });
