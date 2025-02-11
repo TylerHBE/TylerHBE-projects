@@ -14,12 +14,6 @@ mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Connecte
 .catch(err => console.log(err));
 
 // Define Schema & Model
-const fileSchema = new mongoose.Schema({
-    name: String,
-    downloadCount: { type: Number, default: 0 }
-});
-
-// Define Schema & Model
 const downloadSchema = new mongoose.Schema({
     name: String,
     file: String,
@@ -30,7 +24,6 @@ const downloadSchema = new mongoose.Schema({
     description: String
 });
 
-const File = mongoose.model("File", fileSchema);
 const Download = mongoose.model("Download", downloadSchema);
 
 // API to fetch files
@@ -58,7 +51,7 @@ app.get("/download/:filename", async (req, res) => {
     }
 
     // Update download count
-    await File.findOneAndUpdate({ name: filename }, { $inc: { downloadCount: 1 } });
+    await Download.findOneAndUpdate({ file: filename }, { $inc: { downloads: 1 } });
 
     res.download(filePath);
 });

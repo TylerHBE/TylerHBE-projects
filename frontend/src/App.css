@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+.full-height {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.btn.clear-button {
+  background-color: transparent;
+  color: darkgray;
+  text-decoration: underline;
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn.clear-button:hover {
+  color: darkgray;
+  background-color: lightgray;
+  text-decoration: underline;
+}

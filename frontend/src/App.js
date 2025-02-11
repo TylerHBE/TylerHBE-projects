@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./App.css";
 
 import { BrowserRouter as Router, Routes, Route, Link, useSearchParams } from "react-router-dom";
-import { Container, Navbar, Nav, Card, Button, Row, Col, Image } from "react-bootstrap";
+import { Container, Navbar, Nav, Card, Button, Row, Col, Image, Badge, ListGroup, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Home = () => (
-    <Container fluid className="p-0">
+    <Container fluid className="p-0 full-height">
       <div className="bg-image position-relative vh-100" 
            style={{
              backgroundImage: "url('/bcgH2.jpg')",
@@ -59,7 +60,7 @@ const Home = () => (
   );
 
 const About = () => (
-    <Container className="mt-5 text-center">
+    <Container className="mt-5 text-center full-height">
       <div className="open-block">
         <h2>Our Product Philosophy</h2>
         <p>We believe in creating tools that empower musicians, providing them with innovative and intuitive solutions to push their creative boundaries.</p>
@@ -85,7 +86,7 @@ const About = () => (
 
 const NotFoundPage = () => {
   return (
-    <Container className="text-center" style={{ marginTop: "10%" }}>
+    <Container className="text-center full-height" style={{ marginTop: "10%" }}>
       <Row>
         <Col>
           <h1 style={{ fontSize: "10rem", color: "#e74c3c" }}>404</h1>
@@ -113,12 +114,8 @@ function Downloads() {
       });
   }, []);
 
-  const handleDownload = (filename) => {
-      window.location.href = `${API_URL}/download/${filename}`;
-  };
-
   return (
-    <Container className="mt-5">
+    <Container className="mt-5 full-height">
       <h1 className="text-start">Downloads</h1>
       <h3 className="text-muted text-start mt-3">Effects</h3>
       <Row className="g-4">
@@ -173,33 +170,75 @@ function DownloadPage() {
     }
   };
 
+  const handleDownload = async (filename) => {
+    try {
+      const response = await axios.get(`${API_URL}/download/${filename}`, {
+        responseType: 'blob', // Important: tells Axios to handle the response as a file (Blob)
+      });
+  
+      // Create a URL for the Blob response and trigger the download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename); // Set the default download file name
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link); // Clean up the DOM
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+      alert("Failed to download file.");
+    }
+  };
+
   return (
-    <Container className="mt-5">
-      <h1 className="text-start">Download</h1>
-            <Card className="shadow product-card h-100">
-                <Card.Body>
-                  <h1 className="text-xl font-bold mb-4">Query Fetcher</h1>
-                  {loading && <p>Loading...</p>}
-                  {error && <p className="text-red-500">{error}</p>}
-                  {data ? (
-                    <div>
-                      <p className="bg-gray-100 p-2 rounded text-sm overflow-auto">
-                        {JSON.stringify(data, null, 2)}
-                      </p>
-                      <Image src={`/${data.image}`} fluid className="p-3" alt={`${data.imageDescription}`}/>
-                    </div>
-                    
-                  ) : (
-                    <p>
-                      Null!
-                    </p>
-                  )}
-                  <Button onClick={() => fetchData(filename)} className="mt-4" disabled={!filename}>
-                    Refresh Data
-                  </Button>
-                </Card.Body>
-            </Card>
-    </Container>
+    <Container className="mt-4 full-height">
+            <Row className="justify-content-center">
+                <Col md={8}>
+                    <Card className="shadow-lg p-3 mb-5 bg-white rounded">
+                        <Row>
+                            <Col md={4} className="d-flex align-items-center">
+                                {data ? (
+                                  <Card.Img variant="top" src={`/${data ? data.image : "null.img"}`} alt={`${data ? data.imageDescription : "Loading."}`} />
+                                ) : (
+                                  <div className="d-flex align-items-center justify-content-center w-100 h-100">
+                                        <Spinner animation="border" role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </Spinner>
+                                  </div>
+                                )}
+                            </Col>
+                            <Col md={8}>
+                                <Card.Body>
+                                {loading && <p>Loading...</p>}
+                                {error && <p className="text-red-500">{error}</p>}
+                                {data ? (
+                                  <div>
+                                    <Card.Title as="h2">{`${data.name}`}</Card.Title>
+                                    <Badge bg="success" className="mb-2">{`${data.downloads} Downloads`}</Badge>
+                                    <Card.Text className="text-muted">
+                                    {`${data.description}`}
+                                    </Card.Text>
+                                    <ListGroup variant="flush" className="mb-3">
+                                        <ListGroup.Item><strong>Version:</strong> 1.0.0</ListGroup.Item>
+                                        <ListGroup.Item><strong>Compatible with:</strong> Windows, macOS, Linux</ListGroup.Item>
+                                        <ListGroup.Item><strong>Last Updated:</strong> January 2024</ListGroup.Item>
+                                    </ListGroup>
+                                    <Button onClick={() => handleDownload(filename)} variant="primary" size="lg" className="w-100">Download Now</Button>
+                                  </div> ) : (
+                                    <p>
+                                      Null!
+                                    </p>
+                                  )}
+                                  <Button onClick={() => fetchData(filename)} className="mt-4 clear-button" disabled={!filename}>
+                                    Refresh Data
+                                  </Button>
+                                </Card.Body>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
   );
 
 }
