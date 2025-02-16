@@ -21,7 +21,10 @@ const downloadSchema = new mongoose.Schema({
     imageDescription: String,
     downloads: { type: Number, default: 0 },
     fileSize: String,
-    description: String
+    description: String,
+    compatability: String,
+    published: String,
+    updated: String
 });
 
 const Download = mongoose.model("Download", downloadSchema);

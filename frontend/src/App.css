@@ -56,3 +56,37 @@
   background-color: lightgray;
   text-decoration: underline;
 }
+
+.home-links-container {
+  background-color: #f8f9fa; /* Light background */
+  border: 1px solid #ddd; /* Light border */
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.home-link {
+  text-decoration: underline;
+  color: #212529;
+  padding: 8px;
+  transition: background-color 0.1s ease-in-out, text-decoration 0.1s ease-in-out;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.home-link:hover {
+  background-color: rgba(0, 0, 0, 0.075); /* Slightly darker background */
+}
+
+.downloads-link {
+  text-decoration: underline;
+  color: white;
+  padding: 8px;
+  transition: background-color 0.1s ease-in-out, text-decoration 0.1s ease-in-out;
+  border-radius: 8px;
+  border: none;
+  background-color: rgb(143, 144, 184);
+}
+
+.downloads-link:hover {
+  background-color: rgb(123, 124, 170); /* Slightly darker background */
+}

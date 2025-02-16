@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./App.css";
 
@@ -6,58 +6,147 @@ import { BrowserRouter as Router, Routes, Route, Link, useSearchParams } from "r
 import { Container, Navbar, Nav, Card, Button, Row, Col, Image, Badge, ListGroup, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const Home = () => (
-    <Container fluid className="p-0 full-height">
+const Home = () => {
+
+  const usRef = useRef(null);
+  const msRef = useRef(null);
+  const proRef = useRef(null);
+  const techRef = useRef(null);
+  const jourRef = useRef(null);
+
+  const scrollToMs = () => {
+    if (msRef.current) {
+      msRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  const scrollToUs = () => {
+    if (usRef.current) {
+      usRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  const scrollToPro = () => {
+    if (proRef.current) {
+      proRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  const scrollToTech = () => {
+    if (techRef.current) {
+      techRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  const scrollToJour = () => {
+    if (jourRef.current) {
+      jourRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  return (
+    <Container fluid className="p-0 full-height m-0">
       <div className="bg-image position-relative vh-100" 
            style={{
-             backgroundImage: "url('/bcgH2.jpg')",
+             backgroundImage: "url('/bcgH5.png')",
+             backgroundColor: "white",
              backgroundSize: "cover",
-             backgroundPosition: "center",
+             backgroundPosition: "center bottom",
              backgroundRepeat: "no-repeat"
            }}>
-        <div className="position-absolute top-0 start-0 w-100 h-100" 
-             style={{ backgroundColor: "rgba(0, 0, 0, 0.25)" }}>
-        </div>
         <div className="position-relative d-flex align-items-center justify-content-center h-100 text-white">
-          <h1 className="display-3 fw-bold text-shadow">Exclusive VST Deals - Limited Time!</h1>
+          <h1 className="display-3 fw-bold text-shadow">Explore sound.</h1>
         </div>
       </div>
-      <Container className="mt-5 text-center">
-        <div className="open-block">
-          <h2>Unlock Your Creativity</h2>
-          <p>Our mission is to provide innovative tools that inspire musicians to create without limits.</p>
+      <Container fluid className="home-links-container d-flex justify-content-between align-items-center py-3">
+        <div className="text-right">
+          <button className="home-link" onClick={scrollToUs}>
+            Us
+          </button>
+          <button className="home-link" onClick={scrollToMs}>
+            Our mission
+          </button>
+          <button className="home-link" onClick={scrollToPro}>
+            Products
+          </button>
+          <button className="home-link" onClick={scrollToTech}>
+            Technology
+          </button>
+          <button className="home-link" onClick={scrollToJour}>
+            Our journey
+          </button>
         </div>
-        <div className="d-flex justify-content-center flex-wrap mt-5">
-          <Card className="m-3 shadow product-card" style={{ width: "18rem" }}>
-            <Card.Body>
-              <Card.Title>VST Plugin 1</Card.Title>
-              <Card.Text>A powerful synthesizer for electronic music production.</Card.Text>
-            </Card.Body>
+        <div className="text-left">
+          <Link className="downloads-link" to="/downloads">
+            All products
+          </Link>
+        </div>
+      </Container>
+      <Container fluid className="text-center p-0">
+        <div className="bg-image position-relative mt-0 p-5 w-100" style={{
+             backgroundImage: "url('/bcgG3.png')",
+             backgroundColor: "white",
+             backgroundSize: "cover",
+             backgroundPosition: "center bottom",
+             backgroundRepeat: "no-repeat"
+           }}
+        >
+          <div className="open-block mt-5" ref={usRef} id="us">
+            <h2 className="display-5 fw-bold text-shadow">Us</h2>
+            <p className="display-6">The products on this page are made and supported by a small team of one. Everything is 
+              open source, everything is original, and everything is creative. We are producers, and our 
+              goal is to make unique and interesting plugins that transform sounds from bland to 
+              tasty.
+            </p>
+          </div>
+          <div className="open-block mt-5" ref={msRef} id="mission-statement">
+            <h2 className="display-5 fw-bold text-shadow">Our Mission</h2>
+            <p className="display-6">Our mission is to provide innovative tools that inspire musicians to create without limits.</p>
+          </div>
+        </div>
+        
+        <div className="flex-wrap home-links-container d-flex justify-content-center align-items-center py-3" ref={proRef}>
+          <Card className="shadow product-card m-3 h-100" style={{ width: "18rem" }}>
+              <Link to={`/downloads`} className="text-decoration-none text-dark flex-grow-1">
+                <Image src={`/noise.jpg`} fluid className="p-3" alt={`Noise vst image.`}/>
+                <Card.Body>
+                  <Card.Title>Noise</Card.Title>
+                  <Card.Text>A lightwight noise effect.</Card.Text>
+                </Card.Body>
+              </Link>
           </Card>
-          <Card className="m-3 shadow product-card" style={{ width: "18rem" }}>
-            <Card.Body>
-              <Card.Title>VST Plugin 2</Card.Title>
-              <Card.Text>High-quality reverb effect for professional mixing.</Card.Text>
-            </Card.Body>
-          </Card>
-          <Card className="m-3 shadow product-card" style={{ width: "18rem" }}>
-            <Card.Body>
-              <Card.Title>VST Plugin 3</Card.Title>
-              <Card.Text>Advanced EQ for precise audio shaping.</Card.Text>
-            </Card.Body>
+          <Card className="shadow product-card m-3 h-100" style={{ width: "18rem" }}>
+              <Link to={`/downloads`} className="text-decoration-none text-dark flex-grow-1">
+                <Image src={`/fQuantizer.jpg`} fluid className="p-3" alt={`Noise vst image.`}/>
+                <Card.Body>
+                  <Card.Title>fQuantizer</Card.Title>
+                  <Card.Text>A frequency quantizer effect.</Card.Text>
+                </Card.Body>
+              </Link>
           </Card>
         </div>
-        <div className="open-block mt-5">
+
+        <div className="bg-image position-relative mt-0 p-5 w-100" style={{
+             backgroundImage: "url('/bcgG1.png')",
+             backgroundColor: "white",
+             backgroundSize: "cover",
+             backgroundPosition: "center bottom",
+             backgroundRepeat: "no-repeat"
+           }}
+        >
+          <div className="open-block mt-5" ref = {techRef}>
           <h2>The Technology Behind Our Plugins</h2>
-          <p>We leverage the powerful VST3 SDK to bring industry-standard quality to our products.</p>
+          <p>We leverage the powerful VST3 SDK from Setinberg to bring industry-standard quality 
+            to our products. The products are written in C++ and the graphical interfaces are made
+            using GIMP. For a great introduction to the VST3 SDK, 
+            I suggest watching the following <a href="https://youtu.be/zdgytoRLKj0?si=1JNbXEr_CoX_nHY0">video</a>.
+          </p>
         </div>
-        <div className="open-block mt-5">
+        <div className="open-block mt-5" ref={jourRef}>
           <h2>Our Journey</h2>
           <p>We started as musicians and engineers with a passion for sound, and now we're dedicated to crafting tools that elevate music production.</p>
+        </div>
         </div>
       </Container>
     </Container>
   );
+};
 
 const About = () => (
     <Container className="mt-5 text-center full-height">
@@ -70,16 +159,18 @@ const About = () => (
           <Image src="/PORTRAIT.jpg" rounded fluid style={{ maxWidth: "300px" }} />
         </Col>
         <Col md={6} className="text-center">
-          <h2 className="fw-bold">John Doe</h2>
-          <p>Founder & CEO</p>
-          <p>John has over 20 years of experience in audio software development and music production. His dedication to high-quality sound and user-friendly design has made our VSTs industry favorites.</p>
+          <h2 className="fw-bold">Tyler Hickerson</h2>
+          <p>Producer</p>
+          <p>Tyler started this project with lest than one year of experience in music production
+            or sound engineering and over 5 years of experience in programming. He runs the 
+            project to find sounds and effects that he hasn't heard of before and because
+            of his passion for music production.
+          </p>
         </Col>
       </Row>
-      <div className="open-block mt-5">
+      <div className="open-block mt-5 mb-5">
         <h2>Contact Us</h2>
-        <p>Email: support@vststore.com</p>
-        <p>Phone: +1 (234) 567-8900</p>
-        <p>Address: 123 Music Lane, Sound City, SC 12345</p>
+        <p>Email: tylerhickersonbe@gmail.com</p>
       </div>
     </Container>
   );
@@ -103,7 +194,7 @@ const NotFoundPage = () => {
 
 function Downloads() {
 
-  const API_URL = "http://localhost:5000";
+  const API_URL = "https://tylerhbe-projects.onrender.com";
 
   const [files, setFiles] = useState([]);
 
@@ -121,15 +212,15 @@ function Downloads() {
       <Row className="g-4">
         {files.map(file => (
           <Col md={6} lg={4} key={file.name}>
-            <Card className="shadow product-card h-100">
-              <Link to={`/product/?filename=${file.file}`} className="text-decoration-none text-dark">
+            <Card className="shadow product-card h-100 d-flex flex-column">
+              <Link to={`/product/?filename=${file.file}`} className="text-decoration-none text-dark flex-grow-1">
                 <Image src={`/${file.image}`} fluid className="p-3" alt={`${file.imageDescription}`}/>
                 <Card.Body>
                   <Card.Title>{file.name}</Card.Title>
                   <Card.Text>{file.description}</Card.Text>
-                  <Card.Footer>{file.downloads} downloads, {file.fileSize}</Card.Footer>
                 </Card.Body>
               </Link>
+              <Card.Footer className = "mt-auto">{file.downloads} downloads, {file.fileSize}</Card.Footer>
             </Card>
           </Col>
         ))}
@@ -140,7 +231,7 @@ function Downloads() {
 
 function DownloadPage() {
 
-  const API_URL = "http://localhost:5000";
+  const API_URL = "https://tylerhbe-projects.onrender.com";
 
   const [searchParams] = useSearchParams();
   const filename = searchParams.get("filename");
@@ -223,7 +314,7 @@ function DownloadPage() {
                                         <ListGroup.Item><strong>Compatible with:</strong> Windows, macOS, Linux</ListGroup.Item>
                                         <ListGroup.Item><strong>Last Updated:</strong> January 2024</ListGroup.Item>
                                     </ListGroup>
-                                    <Button onClick={() => handleDownload(filename)} variant="primary" size="lg" className="w-100">Download Now</Button>
+                                    <Button onClick={() => { handleDownload(filename); fetchData(filename); }} variant="primary" size="lg" className="w-100">Download Now</Button>
                                   </div> ) : (
                                     <p>
                                       Null!
@@ -246,7 +337,7 @@ function DownloadPage() {
 const Navigation = () => (
   <Navbar bg="dark" variant="dark" expand="lg">
     <Container>
-      <Navbar.Brand href="/">VST Store</Navbar.Brand>
+      <Navbar.Brand href="/">TylerHBE</Navbar.Brand>
       <Nav className="ml-auto">
         <Nav.Link as={Link} to="/">Home</Nav.Link>
         <Nav.Link as={Link} to="/about">About</Nav.Link>
@@ -257,8 +348,11 @@ const Navigation = () => (
 );
 
 const Footer = () => (
-  <footer className="text-center py-3 mt-5 bg-dark text-light">
-    <p>&copy; 2025 VST Store. All rights reserved.</p>
+  <footer className="text-center py-3 mt-0 bg-dark text-light">
+    <p>&copy; 2025 Tyler Hickerson. All rights reserved.</p>
+    <p><a className="text-secondary" href="/Home">Home</a></p>
+    <p><a className="text-secondary" href="/about">About</a></p>
+    <p><a className="text-secondary" href="/downloads">Downloads</a></p>
   </footer>
 );
 
@@ -267,6 +361,7 @@ const App = () => (
     <Navigation />
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/Home" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/downloads" element={<Downloads />} />
       <Route path="/product/" element={<DownloadPage />}/>
