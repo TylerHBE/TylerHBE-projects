@@ -1,0 +1,51 @@
+{
+  "Name": "fQuantizer",
+  "Version": "1.0.0.0",
+  "Factory Info": {
+    "Vendor": "Tyler Hickerson",
+    "URL": "tylerhbe.github.io",
+    "E-Mail": "mailto:tylerhickersonbe@gmail.com",
+    "Flags": {
+      "Unicode": true,
+      "Classes Discardable": false,
+      "Component Non Discardable": false,
+    },
+  },
+  "Classes": [
+    {
+      "CID": "7E6F653EB1A55A4AA96F6F27462CF818",
+      "Category": "Audio Module Class",
+      "Name": "fQuantizer",
+      "Vendor": "Tyler Hickerson",
+      "Version": "1.0.0.0",
+      "SDKVersion": "VST 3.7.12",
+      "Sub Categories": [
+        "Fx",
+      ],
+      "Class Flags": 1,
+      "Cardinality": 2147483647,
+      "Snapshots": [
+        {
+          "Scale Factor": 1,
+          "Path": "Contents/Resources/Snapshots/7E6F653EB1A55A4AA96F6F27462CF818_snapshot.png",
+        },
+        {
+          "Scale Factor": 2,
+          "Path": "Contents/Resources/Snapshots/7E6F653EB1A55A4AA96F6F27462CF818_snapshot_2.0x.png",
+        },
+      ],
+    },
+    {
+      "CID": "9988EC5DEE7451D581A249973A9D08CB",
+      "Category": "Component Controller Class",
+      "Name": "fQuantizerController",
+      "Vendor": "Tyler Hickerson",
+      "Version": "1.0.0.0",
+      "SDKVersion": "VST 3.7.12",
+      "Class Flags": 0,
+      "Cardinality": 2147483647,
+      "Snapshots": [
+      ],
+    },
+  ],
+}
